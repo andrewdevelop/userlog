@@ -35,7 +35,9 @@ class EventListener
 	{
 		$pk = $model->getKeyName();
 		$misc = new Info;
-		$this->log('New user registered '.strtoupper($pk).' '.$model->getAttribute($pk).' '.' ('.$misc.')');
+		$msg = 'New user registered '.strtoupper($pk).' '.$model->getAttribute($pk).' '.' ('.$misc->__toString().')';
+		$this->log($msg);
+		
 		return true;
 	}
 
