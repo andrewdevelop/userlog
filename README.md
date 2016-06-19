@@ -18,9 +18,13 @@ $ composer require andrewdevelop/userlog
 ```
 
 ## Usage
-
+Add to the list of service providers 
 ``` php
-echo "hello world!"
+'providers' => [
+	//...
+	Andrewdevelop\Userlog\UserlogServiceProvider::class
+	//...
+]
 ```
 
 ## Security
