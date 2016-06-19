@@ -24,7 +24,7 @@ class UserlogServiceProvider extends ServiceProvider {
     public function register()
     {
         // Init configuration
-        $this->mergeConfigFrom(__DIR__.DIRECTORY_SEPARATOR.'config'.DIRECTORY_SEPARATOR.'customer.php', 'customer');
+        $this->mergeConfigFrom(__DIR__.DIRECTORY_SEPARATOR.'config'.DIRECTORY_SEPARATOR.'userlog.php', 'userlog');
         
         // Init event listener
         $this->app->events->subscribe('Andrewdevelop\Userlog\EventListener');
