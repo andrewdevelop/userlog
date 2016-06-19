@@ -1,7 +1,10 @@
 <?php 
 
+
+
 namespace Andrewdevelop\Userlog;
 
+use Andrewdevelop\Userlog\Info;
 use Illuminate\Log\Writer;
 use Carbon\Carbon;
 
@@ -15,17 +18,28 @@ class EventListener
 	public function __construct(Writer $logger)
 	{
 		$this->logger = $logger;
+
+		ini_set("display_errors", "1");
+error_reporting(E_ALL);
 	}
 
 	public function onLogin($model)
 	{
+
 		$pk = $model->getKeyName();
-		$this->log('User by '.strtoupper($pk).' '.$model->{$pk}.' logged in'.' ('.implode('; ', $this->getInfo()).')');
+		$misc = new Info;
+		$msg = 'User by '.strtoupper($pk).' '.$model->getAttribute($pk).' logged in'.' ('.$misc->__toString().')';
+		$this->log($msg);
+
+		return true;
 	}
 
 	public function onRegister($model)
 	{
-		# code...
+		$pk = $model->getKeyName();
+		$misc = new Info;
+		$this->log('New user registered '.strtoupper($pk).' '.$model->getAttribute($pk).' '.' ('.$misc.')');
+		return true;
 	}
 
 	public function onUpdating($model)
@@ -41,27 +55,19 @@ class EventListener
 					$value = \Crypt::encrypt($value);
 				}
 
-				$this->log('User by '.strtoupper($pk).' '.$model->{$pk}.' update '.$attribute.' from "'.$original.'" to "'.$value.'" ('.implode('; ', $this->getInfo()).')');
+				$misc = new Info;
+				$this->log('User by '.strtoupper($pk).' '.$model->{$pk}.' update '.$attribute.' from "'.$original.'" to "'.$value.'" ('.$misc.')');
 			}
 		}
+
+		return true;
 	}
 
-	protected function getInfo()
-	{
-		$info = [
-			'ip' => app('request')->ip(),
-			'ua' => app('request')->server('HTTP_USER_AGENT'),
-			'url' => app('request')->fullUrl(),
-			'http_referer' => app('request')->server('HTTP_REFERER'),
-		];
-		
-		return $info;
-	}
 
 	protected function log($msg)
 	{
 		$message = $msg;
-		$path = app('config')->get('userlog.log_path');
+		$path = app('config')->get('userlog.log_path').DIRECTORY_SEPARATOR.'user_log_'.Carbon::now()->format('y_m').'.log';
 		$this->logger->useFiles($path);
 		$this->logger->info($message);
 	}

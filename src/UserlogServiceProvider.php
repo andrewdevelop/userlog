@@ -29,9 +29,6 @@ class UserlogServiceProvider extends ServiceProvider {
         // Init event listener
         $this->app->events->subscribe('Andrewdevelop\Userlog\EventListener');
 
-        // Bind our validation service
-        # $this->app->singleton('Components\Customer\Contracts\ValidationInterface', 'Components\Customer\Repositories\Validator');
-
     }
 
 
