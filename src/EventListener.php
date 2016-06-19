@@ -18,9 +18,6 @@ class EventListener
 	public function __construct(Writer $logger)
 	{
 		$this->logger = $logger;
-
-		ini_set("display_errors", "1");
-error_reporting(E_ALL);
 	}
 
 	public function onLogin($model)
